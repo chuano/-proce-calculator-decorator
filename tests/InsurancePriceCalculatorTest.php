@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Calculator\BasicHomeInsurance;
 use Calculator\FireHomeInsurance;
 use Calculator\GlassHomeInsurance;
-use Calculator\BasicHomeInsurance;
 use Calculator\TheftHomeInsurance;
 use PHPUnit\Framework\TestCase;
 
@@ -51,5 +51,63 @@ class InsurancePriceCalculatorTest extends TestCase
         $fireAndGlassInsurance = new GlassHomeInsurance($fireInsurance);
         $fireGlassAndTheftInsurance = new TheftHomeInsurance($fireAndGlassInsurance);
         $this->assertEquals(1350, $fireGlassAndTheftInsurance->getPrice(100));
+    }
+
+    /** @test */
+    public function should_return_baseprice_given_none_warranty(): void
+    {
+        $baseInsurance = new BasicHomeInsurance();
+        $this->assertEquals(1210, $baseInsurance->getBasePrice(100));
+    }
+
+    /** @test */
+    public function should_return_baseprice_given_one_warranty(): void
+    {
+        $baseInsurance = new BasicHomeInsurance();
+        $fireInsurance = new FireHomeInsurance($baseInsurance);
+        $this->assertEquals(1210, $fireInsurance->getBasePrice(100));
+    }
+
+    /** @test */
+    public function should_return_baseprice_given_all_warranties(): void
+    {
+        $baseInsurance = new BasicHomeInsurance();
+        $fireInsurance = new FireHomeInsurance($baseInsurance);
+        $fireAndGlassInsurance = new GlassHomeInsurance($fireInsurance);
+        $fireGlassAndTheftInsurance = new TheftHomeInsurance($fireAndGlassInsurance);
+        $this->assertEquals(1210, $fireGlassAndTheftInsurance->getBasePrice(100));
+    }
+
+    /** @test */
+    public function should_return_base_warranty(): void
+    {
+        $expected = [BasicHomeInsurance::class];
+        $baseInsurance = new BasicHomeInsurance();
+        $this->assertEquals($expected, $baseInsurance->getWarranties());
+    }
+
+    /** @test */
+    public function should_return_basic_and_fire_warranty(): void
+    {
+        $expected = [BasicHomeInsurance::class, FireHomeInsurance::class];
+        $baseInsurance = new BasicHomeInsurance();
+        $fireInsurance = new FireHomeInsurance($baseInsurance);
+        $this->assertEquals($expected, $fireInsurance->getWarranties());
+    }
+
+    /** @test */
+    public function should_return_all_warranties(): void
+    {
+        $expected = [
+            BasicHomeInsurance::class,
+            FireHomeInsurance::class,
+            GlassHomeInsurance::class,
+            TheftHomeInsurance::class
+        ];
+        $baseInsurance = new BasicHomeInsurance();
+        $fireInsurance = new FireHomeInsurance($baseInsurance);
+        $fireAndGlassInsurance = new GlassHomeInsurance($fireInsurance);
+        $fireGlassAndTheftInsurance = new TheftHomeInsurance($fireAndGlassInsurance);
+        $this->assertEquals($expected, $fireGlassAndTheftInsurance->getWarranties());
     }
 }
