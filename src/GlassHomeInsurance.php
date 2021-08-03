@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Calculator;
 
-class GlassHomeInsurance implements InsuranceDecorator
+class GlassHomeInsurance implements InsurancePrice
 {
     private const EXTRA_PRICE = 25;
 
-    private InsuranceDecorator $insurance;
+    private InsurancePrice $insurance;
 
-    public function __construct(InsuranceDecorator $insurance)
+    public function __construct(InsurancePrice $insurance)
     {
         $this->insurance = $insurance;
     }

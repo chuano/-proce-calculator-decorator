@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Calculator;
 
-class BasicHomeInsurance implements InsuranceDecorator
+class BasicHomeInsurance implements InsurancePrice
 {
     private const PRICE_PER_METER = 12.10;
 

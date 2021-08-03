@@ -2,7 +2,7 @@
 
 namespace Calculator;
 
-interface InsuranceDecorator
+interface InsurancePrice
 {
     public function getPrice(int $meters): float;
 }
